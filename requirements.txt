@@ -1,0 +1,8 @@
+nltk
+mlflow
+airflow-apache
+flask
+pandas
+scikit-learn
+ipykernel
+-e .
