@@ -1,0 +1,8 @@
+s3:
+ bucket: sentimet-analysis
+ train_object: training-data/train.csv
+ save_object: cleaned-data/data.csv
+data:
+ feature: Sentence
+ label: Sentiment
+ 

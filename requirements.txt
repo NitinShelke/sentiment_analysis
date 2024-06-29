@@ -5,4 +5,6 @@ flask
 pandas
 scikit-learn
 ipykernel
+python-box
+pyyaml
 -e .
