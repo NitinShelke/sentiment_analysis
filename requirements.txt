@@ -1,6 +1,6 @@
 nltk
 mlflow
-airflow-apache
+apache-airflow
 flask
 pandas
 scikit-learn
