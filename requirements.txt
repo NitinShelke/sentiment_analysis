@@ -7,4 +7,7 @@ scikit-learn
 ipykernel
 python-box
 pyyaml
+psycopg2
+prometheus_client
+psycopg2-binary
 -e .

@@ -126,5 +126,5 @@ def clean_data(df,col):
     except Exception as e:
         logger.error(e)
         return None
-    logger,info("Data cleaning performed")
+    logger.info("Data cleaning performed")
     return df
