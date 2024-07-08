@@ -2,7 +2,7 @@ data:
   feature: Sentence
   label: Sentiment
 mlflow:
-  experiment_name: Experiment_7
+  experiment_name: Experiment_17
   model_name: sentiment_classifier
   model_uri: null
   tracking_uri: http://ec2-3-7-73-210.ap-south-1.compute.amazonaws.com:5000
