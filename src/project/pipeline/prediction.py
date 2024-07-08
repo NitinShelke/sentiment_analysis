@@ -15,11 +15,8 @@ mlflow.set_tracking_uri(tracking_uri)
 
 class PredictPipeline:
     def __init__(self):
-        pass
-
-    def load_latest_model_and_artifacts(self):
         client = mlflow.tracking.MlflowClient()
-        
+
         try:
             # Get the latest version of the model
             latest_versions = client.get_latest_versions(model_name, stages=["None"])
@@ -32,33 +29,31 @@ class PredictPipeline:
 
             # Load the latest model
             model_uri = f"runs:/{run_id}/model"
-            model = mlflow.pyfunc.load_model(model_uri)
+            self.model = mlflow.pyfunc.load_model(model_uri)
             
             local_artifact_path = os.path.join('artifacts', run_id)
             os.makedirs(local_artifact_path, exist_ok=True)
             client.download_artifacts(run_id, "vectorizer.pkl", local_artifact_path)
+
+            self.vectorizer = joblib.load(os.path.join(local_artifact_path, "vectorizer.pkl"))
             
             logger.info(f"Loaded model from {model_uri}")
             logger.info(f"Downloaded artifacts to {local_artifact_path}")
             
-            return model, local_artifact_path
-        
         except mlflow.exceptions.RestException as e:
             logger.error(f"Error during loading model and artifacts: {e}")
             raise e
         except Exception as e:
             logger.error(f"An unexpected error occurred: {e}")
             raise e
-
+    
     def predict(self, text):
-        model, artifact_path = self.load_latest_model_and_artifacts()
         df = pd.DataFrame({'text': pd.Series(text)})
         df = clean_data(df, 'text')
         cleaned_text = df['text']
-        vectorizer = joblib.load(os.path.join(artifact_path, "vectorizer.pkl"))
-        cleaned_text = vectorizer.transform(df['text'])
+        cleaned_text = self.vectorizer.transform(df['text'])
         cleaned_text = cleaned_text.toarray()
-        return model.predict(cleaned_text)[0]
+        return self.model.predict(cleaned_text)[0]
 
 def main(txt):
     pipeline = PredictPipeline()
